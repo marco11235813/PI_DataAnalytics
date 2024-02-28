@@ -77,7 +77,7 @@ En función de lo analizado en el punto anterior, se plantearon tres objetivos e
     - $\text{Víctimas moto año anterior}$: Número de accidentes mortales con víctimas en moto en el año anterior
     - $\text{Víctimas moto año actual}$: Número de accidentes mortales con víctimas en moto en el año actual 
 
-    Para este caso, se toma como año actual al año 2021 y como año anterior al año 2020. En primer lugar, se calculó la *Cantidad de accidentes mortales de motociclistas* para el año 2020, el cual resultó de -44.00, de esta manera el objetivo a cumplir es de **-40.92** (es decir, la reducción del 7% de la cantidad de accidentes para 2020). El calcular la *Cantidad de accidentes mortales de motociclistas* para el año 2021 resultó de **64.29** lo que significa que aumentó un 64% la cantidad de muertes de conductores de motociclistas respecto del 2021.
+    Para este caso, se toma como año actual al año 2021 y como año anterior al año 2020. En primer lugar, se calculó la *Cantidad de accidentes mortales de motociclistas* para el año 2020, el cual resultó de 44.00, de esta manera el objetivo a cumplir es de **40.92** (es decir, la reducción del 7% de la cantidad de accidentes para 2020). El calcular la *Cantidad de accidentes mortales de motociclistas* para el año 2021 resultó de **64.29** lo que significa que aumentó un 64% la cantidad de muertes de conductores de motociclistas respecto del 2021.
 
 * *Reducir en un 8% la cantidad de accidentes mortales de autos en el último año, en CABA, respecto al año anterior.*
 
