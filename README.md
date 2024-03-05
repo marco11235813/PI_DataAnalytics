@@ -2,7 +2,7 @@
 ![Numpy](https://img.shields.io/badge/-Numpy-333333?style=flat&logo=numpy)
 ![Matplotlib](https://img.shields.io/badge/-Matplotlib-333333?style=flat&logo=matplotlib)
 ![Seaborn](https://img.shields.io/badge/-Seaborn-333333?style=flat&logo=seaborn)
-![BeautifulSoup](https://img.shields.io/badge/-Seaborn-333333?style=flat&logo=beautifulsoup)
+![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-333333?style=flat&logo=beautifulsoup)
 
 # Homicidios por siniestros viales en la Ciudad Autónoma de Buenos Aires, Argentina
 
