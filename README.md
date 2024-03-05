@@ -38,7 +38,7 @@ Ponemos a disposicion un Diccionario de los datos [aqui](https://github.com/marc
 
 Para la elaboración de este proyecto se utilizó Python y Pandas para los procesos de extracción, transformación y carga de los datos, como así también para el análisis exploratorio de los datos. En el siguiente apartado se describen los resultados del análisis.
 
-Luego, para la obtención complementaria de datos para el cálculo de la población en el año 2021 se realizó webscraping utilizando la librería BeautifulSoup.
+Luego, para la obtención complementaria de datos para el cálculo de la población en el año 2021 se realizó webscraping utilizando la librería BeautifulSoup (se puede ver el proceso de webscraping [aqui](https://github.com/marco11235813/PI_DataAnalytics/blob/main/Jupiter_Notebooks/ETL_poblacion.ipynb)).
 
 
 ## ETL y EDA
@@ -47,7 +47,9 @@ En primer lugar, se realizó un proceso de extracción, transformación y carga 
 
 Se puede ver el proceso de ETL de los datos [aqui](https://github.com/marco11235813/PI_DataAnalytics/blob/main/Jupiter_Notebooks/ETL_homicidios.ipynb).
 
-En segundo lugar, se procedió a realizar un análisis exploratorio exahustivo (EDA), con la finalidad de encontrar patrones que permitan generar información que le permita a las autoridades locales tomar medidas para disminuir la cantidad de víctimas fatales de los siniestros viales.
+En segundo lugar, se procedió a realizar un análisis exploratorio exahustivo (EDA), con la finalidad de encontrar patrones que permitan generar información que le permita a las autoridades locales tomar medidas para disminuir la cantidad de víctimas fatales de los siniestros viales. Podemos verlo [aqui](https://github.com/marco11235813/PI_DataAnalytics/blob/main/Jupiter_Notebooks/EDA.ipynb).
+
+Como dato extra, iniciamos un script llamado [resources.py](https://github.com/marco11235813/PI_DataAnalytics/blob/main/Jupiter_Notebooks/resources.py) en donde construimos diversas funciones como herramientas para el analisis y ploteo con su respectiva documentación. 
 
 ## Análisis de los Datos
 
