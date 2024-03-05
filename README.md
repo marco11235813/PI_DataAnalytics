@@ -4,6 +4,7 @@
 ![Seaborn](https://img.shields.io/badge/-Seaborn-333333?style=flat&logo=seaborn)
 ![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-333333?style=flat&logo=beautifulsoup)
 ![PowerBI](https://img.shields.io/badge/-PowerBI-333333?style=flat&logo=powerbi)
+![PowerQuery](https://img.shields.io/badge/-PowerQuery-333333?style=flat&logo=powerquery)
 
 # Homicidios por siniestros viales en la Ciudad Autónoma de Buenos Aires, Argentina
 
