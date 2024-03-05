@@ -14,7 +14,7 @@ En este proyecto se simula el rol de un Data Analyst que forma parte del equipo 
 
 El fin de este proyecto es generar información que le permita a las autoridades locales tomar medidas para disminuir la cantidad de víctimas fatales de los siniestros viales ocurridos en CABA. Para ello, se pone a disposición un dataset sobre homicidios en siniestros viales acaecidos en la Ciudad de Buenos Aires durante el periodo 2016-2021.
 
-Se espera como productos finales un reporte de las tareas realizadas, metodologías adoptadas y principales conclusiones y la presentación de un dashboard interactivo que facilite la interpretación de la información y si análisis.
+Se espera como productos finales un reporte de las tareas realizadas, metodologías adoptadas y principales conclusiones y la presentación de un dashboard interactivo que facilite la interpretación de la información y su análisis.
 
 ## Contexto
 
@@ -31,6 +31,7 @@ Para este proyecto se trabajó con la **Bases de Víctimas Fatales en Siniestros
 * **HECHOS**: que contiene una fila de hecho con id único y las variables temporales, espaciales y participantes asociadas al mismo.
 * **VICTIMAS**: contiene una fila por cada víctima de los hechos y las variables edad, sexo y modo de desplazamiento asociadas a cada víctima. Se vincula a los HECHOS mediante el id del hecho.
 
+Ponemos a disposicion un Diccionario de los datos [aqui](https://github.com/marco11235813/PI_DataAnalytics/blob/main/Diccionario_Datos.xlsx).
 
 
 ## Tecnologías utilizadas
