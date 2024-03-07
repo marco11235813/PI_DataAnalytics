@@ -98,7 +98,7 @@ En función de lo analizado en el punto anterior, se plantearon tres objetivos e
 
     Como se vio en el análisis exploratorio, el 42% de las víctimas mortales se transportaban en auto al momento del hecho. Por lo que se consideró importante proponer el monitoreo de la cantidad de accidentes mortales en este tipo de conductor. Para ello se define a la **Cantidad de accidentes mortales de automovilistas** como el número absoluto de accidentes fatales en los que estuvieron involucradas víctimas que viajaban en auto en un determinado periodo temporal. La fórmula para medir la evolución de los accidentes mortales con víctimas en auto es: 
 
-    $\text{Cantidad de accidentes mortales de motociclistas} = -\frac{\text{Víctimas moto año anterior - Víctimas moto año actual}}{\text{Víctimas moto año anterior}}·100$
+    $\text{Cantidad de accidentes mortales de automovilistas} = -\frac{\text{Víctimas auto año anterior - Víctimas auto año actual}}{\text{Víctimas auto año anterior}}·100$
 
     Donde:
     - $\text{Víctimas auto año anterior}$: Número de accidentes mortales con víctimas en auto en el año anterior
