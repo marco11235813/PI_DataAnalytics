@@ -10,7 +10,18 @@ from datetime import datetime
 def readAllSheets(filename: str) -> dict|list:
 
     """
-    
+    Genera una serie de objetos donde se segmentan las hojas que contiene un archivo .xls como dataframes y una lista de 
+    etiquetas referidas a estas
+
+    Esta función toma un archivo excel y genera un objeto Excelfile que nos permite:
+
+    * Crear un lista con las etiquetas de cada hoja
+    * Crear un diccionario con pares de etiqueta:hoja, donde cada hoja es un objeto dataframe
+    Parameters:
+        filename (str): La ruta del archivo .xls.
+
+    Returns:
+        diccionario de dataframes, lista de nombres
     
     """
 
@@ -32,7 +43,7 @@ def readAllSheets(filename: str) -> dict|list:
 
 
 # Creamos una funcion que realice un analisis de las caracteristicas basicas de un dataframe, con un formato de informe
-def informe_dataframe(data):
+def informe_dataframe(data: str|None= None) -> None:
 
     """
     esta funcion obtiene un dataframe, y realiza un informe analizando y explorando algunas caracteristicas del 
@@ -45,6 +56,10 @@ def informe_dataframe(data):
     -Numero de datos
     -Filas y Columnas
     -Metricas Generales
+
+    Parameters: data (pandas.DataFrame).
+
+    Returns: None.
 
     """
     
@@ -59,11 +74,49 @@ def informe_dataframe(data):
     return
 
 
+
+
 # Creamos una funcion para realizar un analisis particular a una columna/feature
-def informe_columna(df= None, columna= None):
+def informe_columna(df: None= None|str, columna: None= None|str) -> None:
 
     """
-    
+    esta funcion obtiene un dataframe y el nombre de una de sus columnas, y realiza un informe analizando y explorando algunas caracteristicas de
+    la feature, centrandose principalmente en caracteristicas a nivel general y realizando un procesamiento de 
+    algunos datos obteniendo metricas e informacion
+
+    Dependiendo el tipo de dato contenido en la feature/columna, devolvera informacion ligeramente diferente:
+
+    Para tipo object:
+
+    -Numero de datos nulos
+    -Cantidad de valores unicos en la columna
+    -Valores unicos en la columna (Primeros 5 valores, en caso de exceder los 5, en caso contrario, devuelve todos los valores unicos)
+    -Moda de la columna
+    -Distribucion de frecuencias
+
+    Para tipo datetime64[ns]:
+
+    -Numero de datos nulos
+    -Cantidad de valores unicos en la columna
+    -Valores unicos en la columna (una muestra de 4 valores como ejemplo, y el rango que abarcan (desde que valor hasta que valor))
+    -Moda de la columna
+    -Distribucion de frecuencias
+    -Valor maximo y minimo
+
+    Para tipo numerico (int, float):
+
+    -Numero de datos nulos
+    -Valores unicos en la columna (una muestra de 5 valores como ejemplo, y el rango que abarcan (desde que valor hasta que valor))
+    -Moda de la columna
+    -Estadisticos Principales de la columna
+    -Valores extremos
+    -Distribucion de frecuencias
+    -Valor maximo y minimo
+
+
+    Parameters: data (pandas.DataFrame), columna (str).
+
+    Returns: None.
     
     """
 
@@ -84,7 +137,7 @@ def informe_columna(df= None, columna= None):
         print(f'--Distribucion de frecuencias (primeros valores con mayor cantidad de frecuencias)--\n {data.value_counts().nlargest(3)}\n')
     elif data.dtype == 'datetime64[ns]':
         print(f'--Numero de datos nulos--\n{data.isna().sum()}\n')
-
+        print(f'--Cantidad de valores unicos en la columna--\n{data.describe()[1]}\n')
         ## En el print siguinte, realizamos un formateo de los valores de la columna, ya que la salida predeterminada (el output) agrega otros valores que hacen la intrepretacion mas dificil e incomoda
         print(f'--Valores unicos en la columna--\nEj: {data.dt.strftime("%Y-%m-%d").unique()[0:3]}  -----> Desde {list(data.dt.strftime("%Y-%m-%d").unique())[0]}  Hasta {list(data.dt.strftime("%Y-%m-%d").unique())[-1]}\n')
         print(f'--Moda de la columna especificada--\nValor modal -----> {data.describe()[2]}\nFrecuencia acumulada ------> {data.describe()[3]}\n')
@@ -102,20 +155,24 @@ def informe_columna(df= None, columna= None):
 
 
 
-def accidentes_mensuales(df):
+def distribucion_anual_mensual(df, segmentacion: str):
+
     '''
-    Crea gráficos de línea para la cantidad de víctimas de accidentes mensuales por año.
+    Crea gráficos de línea para la cantidad de víctimas de accidentes mensuales por año o para la cantidad de accidentes mensuales por año.
 
     Esta función toma un DataFrame que contiene datos de accidentes, extrae los años únicos
     presentes en la columna 'Año', y crea gráficos de línea para la cantidad de víctimas por mes
-    para cada año. Los gráficos se organizan en una cuadrícula de subgráficos de 2x3.
+    para cada año o para la cantidad de accidentes por mes para cada año. 
+    Los gráficos se organizan en una cuadrícula de subgráficos de 2x3.
 
     Parameters:
         df (pandas.DataFrame): El DataFrame que contiene los datos de accidentes, con una columna 'Año'.
+        segmentacion (str): la referencia que vamos a tomar..... si victimas(fallecidos) o accidentes(siniestros vehiculares)
 
     Returns:
         None
     '''
+
     # Se obtiene una lista de años únicos
     años = df['FECHA'].dt.year.unique()
 
@@ -131,16 +188,29 @@ def accidentes_mensuales(df):
         fila = i // n_columnas
         columna = i % n_columnas
         
-        # Se filtran los datos para el año actual y agrupa por mes
-        data_mensual = (df[df['FECHA'].dt.year == year]
-                        .groupby(df['FECHA'].dt.month)
-                        .agg({'N_VICTIMAS':'sum'}))
+        if segmentacion.lower() == 'victimas': 
+            # Se filtran los datos para el año actual y agrupa por mes
+            data_mensual = (df[df['FECHA'].dt.year == year]
+                            .groupby(df['FECHA'].dt.month)
+                            .agg({'N_VICTIMAS':'sum'}))
         
-        # Se configura el subgráfico actual
-        ax = axes[fila, columna]
-        data_mensual.plot(ax=ax, kind='line')
-        ax.set_title('Año ' + str(year)) ; ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad_victimas')
-        ax.legend_ = None
+            # Se configura el subgráfico actual
+            ax = axes[fila, columna]
+            data_mensual.plot(ax=ax, kind='line')
+            ax.set_title('Año ' + str(year)) ; ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad_victimas')
+            ax.legend_ = None
+
+        elif segmentacion.lower() == 'accidentes': 
+            # Se filtran los datos para el año actual y agrupa por mes
+            data_mensual = (df[df['FECHA'].dt.year == year]
+                            .groupby(df['FECHA'].dt.month)
+                            .agg({'ID_hecho':'count'}))
+        
+            # Se configura el subgráfico actual
+            ax = axes[fila, columna]
+            data_mensual.plot(ax=ax, kind='line')
+            ax.set_title('Año ' + str(year)) ; ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad_accidentes')
+            ax.legend_ = None
         
     # Se muestra y acomoda el gráfico
     plt.tight_layout()
@@ -149,6 +219,7 @@ def accidentes_mensuales(df):
 
 
 def cantidad_victimas_mensuales(df):
+
     '''
     Crea un gráfico de barras que muestra la cantidad de víctimas de accidentes por mes.
 
@@ -162,6 +233,7 @@ def cantidad_victimas_mensuales(df):
     Returns:
         None
     '''
+
     # Se agrupa por la cantidad de víctimas por mes
     # data = df.groupby('FECHA').agg({'N_VICTIMAS':'sum'}).dt.month.reset_index()
     data = df.groupby(df['FECHA'].dt.month)['N_VICTIMAS'].sum().reset_index()
@@ -170,7 +242,7 @@ def cantidad_victimas_mensuales(df):
     plt.figure(figsize=(15,10))
     ax = sns.barplot(x= 'FECHA', y='N_VICTIMAS', data=data)
     ax.set_title('Cantidad de víctimas por Mes')
-    ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad de Accidentes')
+    ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad de Victimas')
     
     # Se imprime resumen
     print(f'El mes con menor cantidad de víctimas tiene {data.min()[1]} víctimas')
@@ -184,6 +256,7 @@ def cantidad_victimas_mensuales(df):
 
 
 def cantidad_victimas_por_dia_semana(df):
+
     '''
     Crea un gráfico de barras que muestra la cantidad de víctimas de accidentes por día de la semana.
 
@@ -198,6 +271,7 @@ def cantidad_victimas_por_dia_semana(df):
     Returns:
         None
     '''
+
     # # Se convierte la columna 'fecha' a tipo de dato datetime
     # df['Fecha'] = pd.to_datetime(df['Fecha'])
     
@@ -215,7 +289,7 @@ def cantidad_victimas_por_dia_semana(df):
     plt.figure(figsize=(15, 10))
     ax = sns.barplot(x='Nombre día', y='N_VICTIMAS', data=data, order=dias_semana)
     
-    ax.set_title('Cantidad de Accidentes por Día de la Semana') ; ax.set_xlabel('Día de la Semana') ; ax.set_ylabel('Cantidad de Accidentes')
+    ax.set_title('Cantidad de Accidentes por Día de la Semana') ; ax.set_xlabel('Día de la Semana') ; ax.set_ylabel('Cantidad de Victimas')
     plt.xticks(rotation=45)
     
     # Se muestran datos resumen
@@ -231,6 +305,7 @@ def cantidad_victimas_por_dia_semana(df):
 
 
 def crea_categoria_momento_dia(hora):
+    
   """
   Devuelve la categoría de tiempo correspondiente a la hora proporcionada.
 
@@ -253,7 +328,9 @@ def crea_categoria_momento_dia(hora):
 
 
 
+
 def cantidad_accidentes_por_categoria_tiempo(df):
+
     '''
     Calcula la cantidad de accidentes por categoría de tiempo y muestra un gráfico de barras.
 
@@ -268,6 +345,7 @@ def cantidad_accidentes_por_categoria_tiempo(df):
     Returns:
         None
     '''
+
     print('Franja horaria:\nMañana: de 6:00 am a 10:59 am\nMediodia: de 11 am a 13:59 pm\nTarde: de 14 a 18:59 pm\nNoche: de 19 pm a 23:59 pm\nMadrugada: de 0 am a 5:59 am')
 
     # Se aplica la función crea_categoria_momento_dia para crear la columna 'categoria_tiempo'
@@ -296,6 +374,7 @@ def cantidad_accidentes_por_categoria_tiempo(df):
 
 
 def distribucion_edad(df):
+
     '''
     Genera un gráfico con un histograma y un boxplot que muestran la distribución de la edad de los involucrados en los accidentes.
 
@@ -305,6 +384,7 @@ def distribucion_edad(df):
     Returns:
         Un gráfico con un histograma y un boxplot.
     '''
+
     # Se crea una figura con un solo eje x compartido
     fig, ax = plt.subplots(2, 1, figsize=(12, 6), sharex=True)
     
@@ -325,6 +405,7 @@ def distribucion_edad(df):
 
     
 def distribucion_edad_por_anio(df):
+
     '''
     Genera un gráfico de boxplot que muestra la distribución de la edad de las víctimas de accidentes por año.
 
@@ -334,6 +415,7 @@ def distribucion_edad_por_anio(df):
     Returns:
         Un gráfico de boxplot.
     '''
+
     # Se crea el gráfico de boxplot
     plt.figure(figsize=(15, 10))
     sns.boxplot(x= df['FECHA'].dt.year, y='EDAD', data=df)
@@ -347,6 +429,7 @@ def distribucion_edad_por_anio(df):
 
 
 def cantidades_accidentes_por_anio_y_sexo(df):
+
     '''
     Genera un gráfico de barras que muestra la cantidad de accidentes por año y sexo.
 
@@ -356,6 +439,7 @@ def cantidades_accidentes_por_anio_y_sexo(df):
     Returns:
         Un gráfico de barras.
     '''
+
     data = df.groupby([df['FECHA'].dt.year, 'SEXO'])['ID_hecho'].count().reset_index()
 
 
@@ -373,6 +457,7 @@ def cantidades_accidentes_por_anio_y_sexo(df):
 
 
 def edad_y_rol_victimas(df):
+
     '''
     Genera un gráfico de la distribución de la edad de las víctimas por rol.
 
@@ -382,6 +467,7 @@ def edad_y_rol_victimas(df):
     Returns:
         None
     '''
+
     plt.figure(figsize=(15, 10))
     sns.boxplot(y='ROL', x='EDAD',data=df)
     plt.title('Edades por Condición')
@@ -391,6 +477,7 @@ def edad_y_rol_victimas(df):
 
 
 def distribucion_edad_por_victima(df):
+
     '''
     Genera un gráfico de la distribución de la edad de las víctimas por tipo de vehículo.
 
@@ -400,6 +487,7 @@ def distribucion_edad_por_victima(df):
     Returns:
         None
     '''
+
     # Se crea el gráfico de boxplot
     plt.figure(figsize=(15, 10))
     sns.boxplot(x='VICTIMA', y='EDAD', data=df)
@@ -412,6 +500,7 @@ def distribucion_edad_por_victima(df):
 
 
 def cantidad_accidentes_sexo(df):
+
     '''
     Genera un resumen de la cantidad de accidentes por sexo de los conductores.
 
@@ -426,6 +515,7 @@ def cantidad_accidentes_sexo(df):
     Returns:
         None
     '''
+
     # # Se convierte la columna 'fecha' a tipo de dato datetime
     # df['Fecha'] = pd.to_datetime(df['Fecha'])
     
@@ -456,6 +546,7 @@ def cantidad_accidentes_sexo(df):
 
 
 def cantidad_victimas_sexo_rol_victima(df):
+
     '''
     Genera un resumen de la cantidad de víctimas por sexo, rol y tipo de vehículo en un accidente de tráfico.
 
@@ -470,6 +561,7 @@ def cantidad_victimas_sexo_rol_victima(df):
     Returns:
         None
     '''
+
     # Se crea el gráfico
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
@@ -558,6 +650,7 @@ def cantidad_victimas_sexo_rol_victima(df):
 
 
 def cantidad_victimas_participantes(df):
+
     '''
     Genera un resumen de la cantidad de víctimas por número de participantes en un accidente de tráfico.
 
@@ -572,6 +665,7 @@ def cantidad_victimas_participantes(df):
     Returns:
         None
     '''
+
     # Se ordenan los datos por 'Participantes' en orden descendente por cantidad
     ordenado = df['PARTICIPANTES'].value_counts().reset_index()
     ordenado = ordenado.rename(columns={'PARTICIPANTES': 'count',
@@ -609,6 +703,7 @@ def cantidad_victimas_participantes(df):
 
 
 def cantidad_acusados(df):
+
     '''
     Genera un resumen de la cantidad de acusados en un accidente de tráfico.
 
@@ -623,6 +718,7 @@ def cantidad_acusados(df):
     Returns:
         None
     '''
+
     # Se ordenan los datos por 'Participantes' en orden descendente por cantidad
     ordenado = df['ACUSADO'].value_counts().reset_index()
     ordenado = ordenado.rename(columns={'ACUSADO': 'count',
@@ -658,6 +754,7 @@ def cantidad_acusados(df):
 
 
 def accidentes_tipo_de_calle(df):
+
     '''
     Genera un resumen de los accidentes de tráfico por tipo de calle y cruce.
 
@@ -672,6 +769,7 @@ def accidentes_tipo_de_calle(df):
     Returns:
         None
     '''
+    
     # Se crea el gráfico
     fig, axes = plt.subplots(figsize=(15, 7))
 
