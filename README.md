@@ -55,18 +55,24 @@ Como dato extra, iniciamos un script llamado [resources.py](https://github.com/m
 
 ## Análisis de los Datos
 
-Iniciamos el analisis de los datos con la variable temporal, para entender la distribución de los homicidios en distintas escalas temporales. La distribución anual de la cantidad de víctimas fatales es de alrededor del 60% para los primeros 3 años del conjunto de datos, con una disminución marcada para el 2020 como consecuencia de la cuarentena por COVID 19. El comportamiento a lo largo del año, es decir, la variación mensual, si bien para todo el conjunto de datos es marcada, con un pico de víctimas en Diciembre, esta tendencia no se observa tan claramente entre los distintos años. Este resultado de la mayor cantidad de víctimas en Diciembre está influenciada por la flexibilización de las medidas tomadas por la cuarentena.
+Iniciamos el analisis de los datos con la variable temporal, para entender la distribución de los accidentes en distintas escalas temporales. La distribución anual de la cantidad de víctimas fatales es de alrededor del 60% para los primeros 3 años del conjunto de datos, con una disminucion en el año 2019, mucho mas para el 2020 como consecuencia de la cuarentena por COVID 19, y un ligero repunte en el año 2021 (aunque si tomamos como referencia la continuacion del año 2019, seguiriamos con la tendencia descendente). En lo referido al comportamiento a lo largo del año, es decir, la variación mensual, podemos ver ciertos puntos en donde se marca una tendencia recurrente:
+
+* Desde el mes de diciembre a enero se observa una pendiente descendente en la cantidad de accidentes en la gran mayoria de los años
+* Ocurre algo similar en el lapso enero-febrero
+* Observamos que la gran mayoria de los años, entre el mes de julio-agosto existe un repunte de accidentes
+* Tambien en TODOS LOS AÑOS, se presenta un repunte de casos en el mes de noviembre con respecto al mes de octubre
 
 Luego, bajando en la escala temporal, se ve que el 70% de las victimas perdieron la vida en entre lunes y viernes, lo que haría pensar que se debe al traslado diario al trabajo, pero en la distribución semanal no se observan diferencias significativas entre los distintos días. Es decir, la cantidad de víctimas un sábado o un domingo, para todo el conjunto de datos, es aproximadamente el mismo.
 
+Vemos de manera marcada una gran diferencia en la cantidad de accidentes segun el momento del dia, en la franja horaria de la mañana (de 6 am a 11:59 am) con mas del 26% del total de accidentes. Esto marca ciertos patrones en cuanto a las actividades diarias que inciden en la generacion de accidentes (por ejemplo podemos pensar en las reactivaciones en los distintos estratos sociales y etareos de actividades que se producen en ella (horario comercial, laboral, de instituciones educativas, industrial, etc))
 
-Lo siguiente que se hizo fue analizar el perfil de la víctima. En primero lugar se ve que el 77% de las víctimas son masculinas. Casi el 50% de las víctimas se encuentran en un rango etario entre los 25 a 25 años de edad, de los cuales entre el 84% de ellos son masculinos. 
+Lo siguiente que se hizo fue analizar el perfil de la víctima. En primero lugar se ve que el 77% de las víctimas son masculinas. Casi el 50% de las víctimas se encuentran en un rango etario entre los 25 a 55 años de edad, de los cuales el 84% de ellos son masculinos. 
 
-Si se observa que rol de la víctima, es decir la posición relativa que ocupaba al momento del hecho, el 48% era conductor. En particular, este 48% se distribuye en un 77% de víctimas que se movilizaban en moto y 19% en auto. En relación a la cantidad de víctimas según el medio de transporte al momento del hecho, el 42% de las víctimas son conductores de moto, de los cuales el 88% de los conductores de moto son masculino.
+Si se observa que rol de la víctima, es decir la posición relativa que ocupaba al momento del hecho,  casi el 47% era conductor. En particular, este 47% se distribuye en un 79% de víctimas que se movilizaban en moto y 19% en auto. En relación a la cantidad de víctimas según el medio de transporte al momento del hecho, el 42% de las víctimas son conductores de moto, de los cuales el 88% de los conductores de moto son masculino.
 
 Asimismo, si se analiza la responsabilidad en el hecho, es decir, el vehículo que ocupaba quien resultó acusado, en el 29% de los casos fue el auto, pero en el 75% son responsabilidad de vehículos como auto, colectivos y camiones.
 
-Por último, se buscaron patrones en la distribución espacial de los hechos. Lo que se destaca de este análisis, es que en todas las comunas de CABA se presenta como factor común los accidentes en las avenidas, que son vías arteriales de calzada ancha, de por lo menos 13 metros. El 62% de las víctimas perdió la vida en avenidas. En particular, en el 82% ocurrió en el cruce de las avenidas con otra calle. Esta es un comportamiento que se mantiene entre los distintos años. En cuanto al rol de la víctima al momento del hecho, en las distintas comunas varía entre moto y peatón.
+Por último, se buscaron patrones en la distribución espacial de los hechos. Lo que se destaca de este análisis, es que en todas las comunas de CABA se presenta como factor común los accidentes en las avenidas, que son vías arteriales de calzada ancha, de por lo menos 13 metros. El 62% de las víctimas perdió la vida en avenidas. En particular, en el 82% ocurrió en el cruce de las avenidas con otra calle. Este es un comportamiento que se mantiene entre los distintos años. En cuanto al rol de la víctima al momento del hecho, en las distintas comunas varía entre moto y peatón.
 
 ## KPI
 
