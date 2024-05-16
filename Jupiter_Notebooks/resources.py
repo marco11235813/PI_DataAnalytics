@@ -167,7 +167,7 @@ def distribucion_anual_mensual(df, segmentacion: str):
 
     Parameters:
         df (pandas.DataFrame): El DataFrame que contiene los datos de accidentes, con una columna 'Año'.
-        segmentacion (str): la referencia que vamos a tomar..... si victimas(fallecidos) o accidentes(siniestros vehiculares)
+        segmentacion (str): la referencia que vamos a tomar: victimas(fallecidos) o accidentes(siniestros vehiculares)
 
     Returns:
         None
@@ -218,14 +218,79 @@ def distribucion_anual_mensual(df, segmentacion: str):
 
 
 
-def cantidad_victimas_mensuales(df):
+
+
+def distribucion_anual_mensual_x_media(df: pd.DataFrame|None):
+
+    """esta funcion toma un conjunto de datos de un dataframe y realiza la construccion de un grafico
+    de lineas de los diferentes años. Grafica la cantidad de accidentes por mes segun el año
+    Tambien grafica el valor medio de accidentes mensuales segun la muestra, para poder realizar la comparacion tanto de mes con mes 
+    contra la media mensual
+
+    Parameters: df
+
+    Returns: None
+    
+    """
+    import numpy as np
+
+    años = df['FECHA'].dt.year.unique()
+    media_mensual = int(len(df)/(len(años)*12))# sacamos la media para asignarla como valor para trazar una linea en el grafico que muestre la desviacion con respecto a la media de cada año en cantidad de accidentes
+
+    data_mensual = (df
+                    .groupby([df['FECHA'].dt.year.rename('AÑO'),df['FECHA'].dt.month.rename('MES')])
+                    .agg({'ID_hecho':'count'})).reset_index()
+    
+    max_value = data_mensual['ID_hecho'].max()
+
+    fig,ax= plt.subplots(figsize= (20,10))
+    for idx in años:
+        ax.plot(data_mensual['MES'][data_mensual['AÑO'] == idx], data_mensual['ID_hecho'][data_mensual['AÑO'] == idx].astype('int'), label= idx)
+
+    ax.plot(np.arange(1, 13), [media_mensual]* 12, linestyle='--', linewidth=3, color='black', label='Media Mensual')
+    plt.legend(title= 'Años')
+    plt.xlabel('Meses')
+    plt.ylabel('Cantidad de Accidentes')
+    plt.title('Evolucion de Cantidad de Accidentes (por año y por mes)')
+    plt.yticks(range(0,max_value + 1,5))
+    plt.grid()
+    plt.show()
+
+
+
+
+def accidentes_anuales(df: pd.DataFrame):
+
+    """
+    
+    """
+
+    años = df['FECHA'].dt.year.unique()
+    data_anual = (df
+                .groupby(df['FECHA'].dt.year.rename('AÑO'))
+                .agg({'ID_hecho':'count'})).reset_index()
+    
+
+    figure, ax = plt.subplots(figsize= (20,10))
+
+    ax.plot(data_anual['AÑO'], data_anual['ID_hecho'])
+    plt.xlabel('Año')
+    plt.ylabel('Cantidad de Accidentes')
+    plt.title('Evolucion de Cantidad de Accidentes por año')
+    plt.grid()
+    plt.show()
+
+
+
+
+def cantidad_accidentes_mensuales(df):
 
     '''
-    Crea un gráfico de barras que muestra la cantidad de víctimas de accidentes por mes.
+    Crea un gráfico de barras que muestra la cantidad de accidentes con victimas fatales por mes.
 
     Esta función toma un DataFrame que contiene datos de accidentes, agrupa los datos por mes
-    y calcula la cantidad total de víctimas por mes. Luego, crea un gráfico de barras que muestra
-    la cantidad de víctimas para cada mes.
+    y calcula la cantidad total de accidentes por mes. Luego, crea un gráfico de barras que muestra
+    la cantidad de accidentes para cada mes.
 
     Parameters:
         df (pandas.DataFrame): El DataFrame que contiene los datos de accidentes con una columna 'Mes'.
@@ -233,29 +298,47 @@ def cantidad_victimas_mensuales(df):
     Returns:
         None
     '''
+    # creamos un diccionario con las etiquetas de cada mes
+    meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+    etiquetas= {}
+    for num in range(1,13):
+        etiquetas.setdefault(num,meses[num-1])
+        
 
     # Se agrupa por la cantidad de víctimas por mes
-    # data = df.groupby('FECHA').agg({'N_VICTIMAS':'sum'}).dt.month.reset_index()
-    data = df.groupby(df['FECHA'].dt.month)['N_VICTIMAS'].sum().reset_index()
-    
+    data = df.groupby(df['FECHA'].dt.month)['ID_hecho'].count().reset_index()
+    data['MES'] = data['FECHA'].map(lambda x: etiquetas[x])
+
     # Se grafica
-    plt.figure(figsize=(15,10))
-    ax = sns.barplot(x= 'FECHA', y='N_VICTIMAS', data=data)
-    ax.set_title('Cantidad de víctimas por Mes')
-    ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad de Victimas')
-    
+    plt.figure(figsize=(20,10))
+    plt.subplot(1,2,1)
+    ax = sns.barplot(x= 'MES', y='ID_hecho', data=data)
+    # ax.set_xticklabels(etiquetas.values(), rotation= 45)  #asignamos el conjunto de etiquetas al eje x del grafico de barras
+    ax.set_title('Cantidad de Accidentes por Mes')
+    ax.set_xlabel('Mes') ; ax.set_ylabel('Cantidad de Accidentes')
+    plt.xticks(rotation= 45)
+    plt.grid()
+
+    # Se crea un grafico de torta para graficar las proporciones representativas de los datos
+
+    plt.subplot(1,2,2)
+    plt.pie(x= data['ID_hecho'], labels= data['MES'], shadow= True, autopct='%1.1f%%', data= data)
+    plt.title('Distribucion de porcentajes Accidentes por Mes')
+    plt.xlabel('Mes')
+    plt.grid()
+
     # Se imprime resumen
-    print(f'El mes con menor cantidad de víctimas tiene {data.min()[1]} víctimas')
-    print(f'El mes con mayor cantidad de víctimas tiene {data.max()[1]} víctimas')
+    print(f'El mes con menor cantidad de accidentes tiene {data.min()[1]} accidentes')
+    print(f'El mes con mayor cantidad de accidentes tiene {data.max()[1]} accidentes')
     
     # Se muestra el gráfico
-    plt.grid()
+    # plt.grid()
     plt.show()
 
 
 
 
-def cantidad_victimas_por_dia_semana(df):
+def cantidad_por_dia_semana(df, segmentacion: str):
 
     '''
     Crea un gráfico de barras que muestra la cantidad de víctimas de accidentes por día de la semana.
@@ -272,8 +355,7 @@ def cantidad_victimas_por_dia_semana(df):
         None
     '''
 
-    # # Se convierte la columna 'fecha' a tipo de dato datetime
-    # df['Fecha'] = pd.to_datetime(df['Fecha'])
+
     
     # Se extrae el día de la semana (0 = lunes, 6 = domingo)
     df['Día semana'] = df['FECHA'].dt.dayofweek
@@ -282,21 +364,53 @@ def cantidad_victimas_por_dia_semana(df):
     dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     df['Nombre día'] = df['Día semana'].map(lambda x: dias_semana[x])
     
-    # Se cuenta la cantidad de accidentes por día de la semana
-    data = df.groupby('Nombre día').agg({'N_VICTIMAS':'sum'}).reset_index()
-      
-    # Se crea el gráfico de barras
-    plt.figure(figsize=(15, 10))
-    ax = sns.barplot(x='Nombre día', y='N_VICTIMAS', data=data, order=dias_semana)
-    
-    ax.set_title('Cantidad de Accidentes por Día de la Semana') ; ax.set_xlabel('Día de la Semana') ; ax.set_ylabel('Cantidad de Victimas')
-    plt.xticks(rotation=45)
-    
-    # Se muestran datos resumen
-    print(f'El día de la semana con menor cantidad de víctimas tiene {data.min()[1]} víctimas')
-    print(f'El día de la semana con mayor cantidad de víctimas tiene {data.max()[1]} víctimas')
-    print(f'La diferencia porcentual es de {round((data.max()[1] - data.min()[1]) / data.min()[1] * 100,2)}')
-    
+    if segmentacion.lower() == 'victimas': 
+        # Se cuenta la cantidad de accidentes por día de la semana
+        data = df.groupby('Nombre día').agg({'N_VICTIMAS':'sum'}).reset_index()
+        
+        # Se crea el gráfico de barras
+        plt.figure(figsize=(20,10))
+        plt.subplot(1,2,1)
+        ax = sns.barplot(x='Nombre día', y='N_VICTIMAS', data=data, order=dias_semana)
+        
+        ax.set_title('Cantidad de Victimas por Día de la Semana') ; ax.set_xlabel('Día de la Semana') ; ax.set_ylabel('Cantidad de Victimas')
+        plt.xticks(rotation=45)
+        # Se muestran datos resumen
+        print(f'El día de la semana con menor cantidad de víctimas tiene {data.min()[1]} víctimas')
+        print(f'El día de la semana con mayor cantidad de víctimas tiene {data.max()[1]} víctimas')
+        print(f'La diferencia porcentual es de {round((data.max()[1] - data.min()[1]) / data.min()[1] * 100,2)}')
+
+        # Se crea un grafico de torta para graficar las proporciones representativas de los datos
+        plt.subplot(1,2,2)
+        plt.pie(x= data['N_VICTIMAS'], labels= data['Nombre día'], shadow= True, autopct='%1.1f%%', data= data)
+        plt.title('Distribucion de porcentajes Victimas por dia')
+        plt.xlabel('Dia')
+        plt.grid()
+
+        
+    elif segmentacion.lower() == 'accidentes':     
+        # Se cuenta la cantidad de accidentes por día de la semana
+        data = df.groupby('Nombre día').agg({'ID_hecho':'count'}).reset_index()
+        
+        # Se crea el gráfico de barras
+        plt.figure(figsize=(20,10))
+        plt.subplot(1,2,1)
+        ax = sns.barplot(x='Nombre día', y='ID_hecho', data=data, order=dias_semana)
+        
+        ax.set_title('Cantidad de Accidentes por Día de la Semana') ; ax.set_xlabel('Día de la Semana') ; ax.set_ylabel('Cantidad de Accidentes')
+        plt.xticks(rotation=45)
+        # Se muestran datos resumen
+        print(f'El día de la semana con menor cantidad de accidentes tiene {data.min()[1]} víctimas')
+        print(f'El día de la semana con mayor cantidad de accidentes tiene {data.max()[1]} víctimas')
+        print(f'La diferencia porcentual es de {round((data.max()[1] - data.min()[1]) / data.min()[1] * 100,2)}')
+
+        # Se crea un grafico de torta para graficar las proporciones representativas de los datos
+        plt.subplot(1,2,2)
+        plt.pie(x= data['ID_hecho'], labels= data['Nombre día'], shadow= True, autopct='%1.1f%%', data= data)
+        plt.title('Distribucion de porcentajes Accidentes por dia')
+        plt.xlabel('Dia')
+        plt.grid()
+
     # Se muestra el gráfico
     plt.grid()
     plt.show()
@@ -360,7 +474,8 @@ def cantidad_accidentes_por_categoria_tiempo(df):
     data['Porcentaje'] = (data['Cantidad accidentes'] / total_accidentes) * 100
     
     # Se crea el gráfico de barras
-    plt.figure(figsize=(15, 10))
+    plt.figure(figsize=(20,10))
+    plt.subplot(1,2,1)
     ax = sns.barplot(x='Categoria tiempo', y='Cantidad accidentes', data=data)
 
     ax.set_title('Cantidad de Accidentes por Categoría de Tiempo') ; ax.set_xlabel('Categoría de Tiempo') ; ax.set_ylabel('Cantidad de Accidentes')
@@ -368,6 +483,13 @@ def cantidad_accidentes_por_categoria_tiempo(df):
     # Se agrega las cantidades en las barras
     for index, row in data.iterrows():
         ax.annotate(f'{row["Cantidad accidentes"]}', (index, row["Cantidad accidentes"]), ha='center', va='bottom')
+
+    # Se crea un grafico de torta para graficar las proporciones representativas de los datos
+    plt.subplot(1,2,2)
+    plt.pie(x= data['Cantidad accidentes'], labels= data['Categoria tiempo'], shadow= True, autopct='%1.1f%%', data= data)
+    plt.title('Distribucion de porcentajes Accidentes por Momento del dia')
+    plt.xlabel('Dia')
+    plt.grid()
 
     # Se muestra el gráfico
     plt.show()
@@ -499,15 +621,13 @@ def distribucion_edad_por_victima(df):
 
 
 
-def cantidad_accidentes_sexo(df):
+def cantidad_accidentes_finde(df):
 
     '''
-    Genera un resumen de la cantidad de accidentes por sexo de los conductores.
+    Genera un resumen de la cantidad de accidentes de acuerdo a dia de semana y fines de semana de los conductores.
 
-    Esta función toma un DataFrame como entrada y genera un resumen que incluye:
-
-    * Un gráfico de barras que muestra la cantidad de accidentes por sexo de los conductores en orden descendente.
-    * Un DataFrame que muestra la cantidad y el porcentaje de accidentes por sexo de los conductores.
+    Esta función toma un DataFrame como entrada y genera un gráfico de barras que muestra la cantidad de accidentes 
+    en dias de semana y en fines de semana de los conductores .
 
     Parameters:
         df (pandas.DataFrame): El DataFrame que se va a analizar.
@@ -516,8 +636,6 @@ def cantidad_accidentes_sexo(df):
         None
     '''
 
-    # # Se convierte la columna 'fecha' a tipo de dato datetime
-    # df['Fecha'] = pd.to_datetime(df['Fecha'])
     
     # Se extrae el día de la semana (0 = lunes, 6 = domingo)
     df['Dia semana'] = df['FECHA'].dt.dayofweek
@@ -587,64 +705,6 @@ def cantidad_victimas_sexo_rol_victima(df):
 
     # Se muestran los gráficos
     plt.show()
-    
-    # # Se calcula la cantidad de víctimas por sexo
-    # sexo_counts = df['Sexo'].value_counts().reset_index()
-    # sexo_counts.columns = ['Sexo', 'Cantidad de víctimas']
-
-    # # Se calcula el porcentaje de víctimas por sexo
-    # total_victimas_sexo = sexo_counts['Cantidad de víctimas'].sum()
-    # sexo_counts['Porcentaje de víctimas'] = (sexo_counts['Cantidad de víctimas'] / total_victimas_sexo) * 100
-
-    # # Se crea el DataFrame para sexo
-    # df_sexo = pd.DataFrame(sexo_counts)
-    # print('Resumen para Sexo:')
-    # print(df_sexo)
-    
-    # # Se calcula la cantidad de víctimas por rol y sexo
-    # df_rol = df.groupby(['Rol', 'Sexo']).size().unstack(fill_value=0)
-
-    # # Se calcula el porcentaje de víctimas por rol y sexo
-    # total_victimas_rol = df_rol.sum(axis=1)
-    # df_rol_porcentaje = df_rol.divide(total_victimas_rol, axis=0) * 100
-
-    # # Se renombra las columnas para el DataFrame de porcentaje
-    # df_rol_porcentaje.columns = [f"Porcentaje de víctimas {col}" for col in df_rol_porcentaje.columns]
-
-    # # Se combinan los DataFrames de cantidad y porcentaje
-    # df_rol = pd.concat([df_rol, df_rol_porcentaje], axis=1)
-    # print('Resumen para Rol:')
-    # print(df_rol)
-    
-    # # Se calcula la cantidad de víctimas por tipo de vehículo
-    # tipo_vehiculo_counts = df['Víctima'].value_counts().reset_index()
-    # tipo_vehiculo_counts.columns = ['Tipo de Vehículo', 'Cantidad de víctimas']
-
-    # # Se calcula el porcentaje de víctimas por tipo de vehículo
-    # total_victimas = tipo_vehiculo_counts['Cantidad de víctimas'].sum()
-    # tipo_vehiculo_counts['Porcentaje de víctimas'] = round((tipo_vehiculo_counts['Cantidad de víctimas'] / total_victimas) * 100,2)
-
-    # # Se crea un DataFrame con la cantidad y porcentaje de víctimas por tipo de vehículo
-    # df_tipo_vehiculo = pd.DataFrame(tipo_vehiculo_counts)
-    # print('Resumen para Tipo de vehículo:')
-    # print(df_tipo_vehiculo)
-    
-    # # Se calcula la cantidad de víctimas por tipo de vehículo y sexo
-    # tipo_vehiculo_sexo_counts = df.groupby(['Víctima', 'Sexo']).size().unstack(fill_value=0).reset_index()    
-    # tipo_vehiculo_sexo_counts.columns = ['Tipo de Vehículo', 'Mujeres', 'Hombres']
-
-    # # Se calcula la cantidad total de víctimas
-    # total_victimas = tipo_vehiculo_sexo_counts[['Hombres', 'Mujeres']].sum(axis=1)
-
-    # # se agregan las columnas de cantidad total y porcentaje
-    # tipo_vehiculo_sexo_counts['Cantidad Total'] = total_victimas
-    # tipo_vehiculo_sexo_counts['Porcentaje Hombres'] = (tipo_vehiculo_sexo_counts['Hombres'] / total_victimas) * 100
-    # tipo_vehiculo_sexo_counts['Porcentaje Mujeres'] = (tipo_vehiculo_sexo_counts['Mujeres'] / total_victimas) * 100
-
-    # # Se imprimen resumenes
-    # print("Resumen de víctimas por tipo de vehículo y sexo:")
-    # print(tipo_vehiculo_sexo_counts)
-
 
 
 
@@ -684,21 +744,6 @@ def cantidad_victimas_participantes(df):
     # Se muestra el gráfico
     plt.show()
     
-    # # Se calcula la cantidad de víctimas por participantes
-    # participantes_counts = df['Participantes'].value_counts().reset_index()
-    # participantes_counts.columns = ['Participantes', 'Cantidad de víctimas']
-
-    # # Se calcula el porcentaje de víctimas por participantes
-    # total_victimas = participantes_counts['Cantidad de víctimas'].sum()
-    # participantes_counts['Porcentaje de víctimas'] = round((participantes_counts['Cantidad de víctimas'] / total_victimas) * 100,2)
-
-    # # Se ordenan los datos por cantidad de víctimas en orden descendente
-    # participantes_counts = participantes_counts.sort_values(by='Cantidad de víctimas', ascending=False)
-    
-    # # Se imprimen resumenes
-    # print("Resumen de víctimas por participantes:")
-    # print(participantes_counts)
-    
 
 
 
@@ -725,29 +770,24 @@ def cantidad_acusados(df):
                                     'index': 'ACUSADO'})
     ordenado = ordenado.sort_values(by='count', ascending=False)
     
-    plt.figure(figsize=(15, 10))
+    plt.figure(figsize=(20,10))
+    plt.subplot(1,2,1)
     
     # Crear el gráfico de barras
     ax = sns.barplot(data=ordenado, x='ACUSADO', y='count', order=ordenado['ACUSADO'])
-    ax.set_title('Cantidad de acusados en los hechos') ; ax.set_ylabel('Cantidad de acusados') 
+    ax.set_title('Cantidad de Acusados en los hechos') ; ax.set_ylabel('Cantidad de Acusados') 
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
+
+    # Se crea un grafico de torta para graficar las proporciones representativas de los datos
+    plt.subplot(1,2,2)
+    plt.pie(x= ordenado['count'], labels= ordenado['ACUSADO'], shadow= True, autopct='%1.1f%%', data= ordenado)
+    plt.title('Distribucion de porcentajes\nAcusados en Accidentes')
+    plt.xlabel('Acusados')
+    plt.grid()
+    
 
     # Se muestra el gráfico
     plt.show()
-    
-    # # Se calcula la cantidad de acusados
-    # acusados_counts = df['Acusado'].value_counts().reset_index()
-    # acusados_counts.columns = ['Acusado', 'Cantidad de acusados']
-
-    # # Se calcula el porcentaje de acusados
-    # total_acusados = acusados_counts['Cantidad de acusados'].sum()
-    # acusados_counts['Porcentaje de acusados'] = round((acusados_counts['Cantidad de acusados'] / total_acusados) * 100,2)
-
-    # # Se ordenan los datos por cantidad de acusados en orden descendente
-    # acusados_counts = acusados_counts.sort_values(by='Cantidad de acusados', ascending=False)
-    # # Se imprimen resumen
-    # print("Resumen de acusados:")
-    # print(acusados_counts)
 
 
 
@@ -771,41 +811,135 @@ def accidentes_tipo_de_calle(df):
     '''
     
     # Se crea el gráfico
-    fig, axes = plt.subplots(figsize=(15, 7))
-
-    sns.countplot(data=df, x='TIPO_DE_CALLE', ax=axes)
-    axes.set_title('Cantidad de víctimas por tipo de calle') ; axes.set_ylabel('Cantidad de víctimas')
+    plt.figure(figsize=(20,10))
+    plt.subplot(1,2,1)
+    ax = sns.countplot(data=df, x='TIPO_DE_CALLE')
+    ax.set_title('Cantidad de Accidentes por tipo de calle') ; ax.set_ylabel('Cantidad de Accidentes')
 
     # sns.countplot(data=df, x='Cruce', ax=axes[1])
     # axes[1].set_title('Cantidad de víctimas en cruces') ; axes[1].set_ylabel('Cantidad de víctimas')
+    temp= df['TIPO_DE_CALLE'].value_counts()
+
+    # Se crea un grafico de torta para graficar las proporciones representativas de los datos
+    plt.subplot(1,2,2)
+    plt.pie(x= temp, labels= temp.index, shadow= True, autopct='%1.1f%%', data= temp)
+    plt.title('Distribucion de porcentajes\nCantidad de Accidentes por tipo de calle')
+    plt.xlabel('Tipo de Calle')
+    plt.grid()
     
     # Mostramos los gráficos
     plt.show()
     
-    # # Se calcula la cantidad de víctimas por tipo de calle
-    # tipo_calle_counts = df['Tipo de calle'].value_counts().reset_index()
-    # tipo_calle_counts.columns = ['Tipo de calle', 'Cantidad de víctimas']
 
-    # # Se calcula el porcentaje de víctimas por tipo de calle
-    # tipo_calle_counts['Porcentaje de víctimas'] = round((tipo_calle_counts['Cantidad de víctimas'] / tipo_calle_counts['Cantidad de víctimas'].sum()) * 100,2)
 
-    # # Se calcula la cantidad de víctimas por cruce
-    # cruce_counts = df['Cruce'].value_counts().reset_index()
-    # cruce_counts.columns = ['Cruce', 'Cantidad de víctimas']
 
-    # # Se calcula el porcentaje de víctimas por cruce
-    # cruce_counts['Porcentaje de víctimas'] = round((cruce_counts['Cantidad de víctimas'] / cruce_counts['Cantidad de víctimas'].sum()) * 100,2)
+def accidentes_cruce(df: pd.DataFrame):
 
-    # # Se crean DataFrames para tipo de calle y cruce
-    # df_tipo_calle = pd.DataFrame(tipo_calle_counts)
-    # df_cruce = pd.DataFrame(cruce_counts)
+    """Esta funcion toma como argumento un dataframe y realiza un analisis de algunas
+    de sus features, devolviendo una serie de graficos:
 
-    # #  Se muestran los DataFrames resultantes
-    # print("Resumen por Tipo de Calle:")
-    # print(df_tipo_calle)
-    # print("\nResumen por Cruce:")
-    # print(df_cruce)
+    - Barplot sobre cantidad de accidentes en cruces
+    - Pie sobre la proporcion de accidentes en cruces
+    - Countplot sobre accidentes por tipo de calles según si son cruces o no
+    - Barplot sobre accidentes por momento del día segun si son cruces o no
+    
+    Parameters: pd.DataFrame
 
+    Returns: None
+
+    """
+
+    # Se cuenta la cantidad de accidentes por tipo de día
+    data = df['CRUCE'].value_counts().reset_index()
+    # data.columns = ['Tipo de día', 'Cantidad de accidentes']
+    
+    # Se aplica la función crea_categoria_momento_dia para crear la columna 'categoria_tiempo'
+    df['Categoria tiempo'] = df['HORA_HECHO'].apply(crea_categoria_momento_dia)
+
+    # 1-barplot cruces
+    plt.figure(figsize=(20, 10))
+    plt.subplot(2,2,1)
+    ax = sns.barplot(x= data['index'], y= data['CRUCE'], data=data)
+    
+    ax.set_title('Cantidad de accidentes en cruces') ; ax.set_xlabel('Cruce') ; ax.set_ylabel('Cantidad de accidentes')
+    
+    # Se agrega las cantidades en las barras
+    for index, row in data.iterrows():
+        ax.annotate(f'{row["CRUCE"]}', (index, row["CRUCE"]), ha='center', va='bottom')
+    
+
+    # 2-pie proporciones cruces
+    plt.subplot(2,2,2)
+    ax = plt.pie(data['CRUCE'], labels= data['index'], shadow= True, autopct='%1.1f%%', explode= (0.0, 0.1))
+    plt.title('Proporcion')
+    plt.xlabel('Cruce')
+
+    # 3-countplot accidentes por tipo de calles según si son cruces o no
+    plt.subplot(2,2,3)
+    ax = sns.countplot(data=df, x='TIPO_DE_CALLE', hue= 'CRUCE')
+    ax.set_title('Cantidad de Accidentes por tipo de calle (según si son cruces o no)') ; ax.set_ylabel('Cantidad de Accidentes')
+    plt.grid()
+
+
+
+    # Se aplica la función crea_categoria_momento_dia para crear la columna 'categoria_tiempo'
+    df['Categoria tiempo'] = df['HORA_HECHO'].apply(crea_categoria_momento_dia)
+
+    # 4- Barplot
+
+    # Creamos el gráfico de barras
+    plt.subplot(2,2,4)
+    ax = sns.countplot(data=df, x='Categoria tiempo', hue='CRUCE', dodge=True)
+    plt.title('Cantidad de Accidentes por Momento del Día (segun si son cruces o no)')
+    plt.ylabel('Cantidad de Accidentes')
+    plt.xlabel('Momento del Día')
+    plt.legend(title='Cruce')
+    plt.grid(True)
+
+    
+    # Mostramos los gráficos
+    plt.show()
+    
+
+def cruces_x_momentos(df: pd.DataFrame):
+
+    """
+    esta funcion toma como argumento un dataframe y realiza un preprocesamiento de algunas de sus features.
+    devuelve una serie de graficos de torta (pie) donde se segmentan los valores de accidentes ocurridos en la franja horaria de la noche,
+    la madrugada y la mañana segun si ocurrieron en cruces o no
+
+    Parameters: df (pd.DataFrame)
+
+    Returns: None    
+    """
+    
+    # Se aplica la función crea_categoria_momento_dia para crear la columna 'categoria_tiempo'
+    df['Categoria tiempo'] = df['HORA_HECHO'].apply(crea_categoria_momento_dia)
+
+
+    mañana = df[df['Categoria tiempo'] == 'Mañana']['CRUCE'].value_counts()
+    noche = df[df['Categoria tiempo'] == 'Noche']['CRUCE'].value_counts()
+    madrugada = df[df['Categoria tiempo'] == 'Madrugada']['CRUCE'].value_counts()
+
+    plt.figure(figsize= (15,10))
+
+    plt.subplot(1,2,1)
+    ax = plt.pie(noche, labels= noche.index, shadow= True, autopct='%1.1f%%', explode= (0.0, 0.1))
+    plt.title('Proporcion accidentes ocurridos en la Noche en cruces')
+    plt.xlabel('Cruces')
+
+    plt.subplot(1,2,2)
+    ax = plt.pie(madrugada, labels= madrugada.index, shadow= True, autopct='%1.1f%%', explode= (0.0, 0.1))
+    plt.title('Proporcion accidentes ocurridos en la Madrugada en cruces')
+    plt.xlabel('Cruces')
+    plt.show()
+
+    plt.figure(figsize= (8,5))
+    ax = plt.pie(mañana, labels= mañana.index, shadow= True, autopct='%1.1f%%', explode= (0.0, 0.1))
+    plt.title('Proporcion accidentes ocurridos en la Mañana en cruces')
+    plt.xlabel('Cruces')
+
+    plt.show()
 
 
 
