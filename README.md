@@ -114,11 +114,17 @@ En función de lo analizado en el punto anterior, se plantearon tres objetivos e
 
 ## Conclusiones y recomendaciones
 
-Entre los años 2016 a 2021 se registraron 717 víctimas fatales en accidentes de tránsito. El 70% de las víctimas se registraron durante la semana. En cuanto a la franja horaria, el 12% de los hechos ocurre entre las 6 y las 8 de la mañana, pero durante los fines de semana. Diciembre es el mes que resulta con el máximo de fallecimientos en el período analizado.
+Entre los años 2016 a 2021 se registraron 717 víctimas fatales en accidentes de tránsito. Alrededor del 70% de las víctimas se registraron durante la semana. En cuanto a la franja horaria, mas del 26% de los hechos ocurre entre las 6 y las 11:59 de la mañana. Diciembre es el mes que resulta con el máximo de fallecimientos en el período analizado. Podemos señalar como potencial patron el inicio de actividades, tanto productivas como escolares en el caso de la franja horaria de la mañana, y de vacaciones como puntos de variabilidad, con su maximo exponente en las fiestas de fin de año para el caso del mes de Diciembre
 
-Mas del 77% de las victimas en accidentes son masculinos. En relación al tipo de usuario, el 41% fueron motociclistas. El 61% de los homicidios ocurrió en algún punto de las avenidas de CABA.
+Mas del 83% de las victimas en accidentes son masculinos. En relación al tipo de usuario, el 42% fueron motociclistas. El 62% de los homicidios ocurrió en algún punto de las avenidas de CABA.
+Las victimas de mayor edad se observan mas concentradas cuando son pasajeros y las victimas mas jovenes se observan mas concentradas cuando se desplazan en moto.
 
-Finalmente, para el segundo semestre del año 2021, se cumplió con el objetivo de bajar la tasa de homicidios en siniestros viales y de bajar el porcentaje de victimas en autos, pero no se cumplieron los objetivos de reducir la cantidad de accidentes mortales en motociclistas 
+En las combinaciones de participantes en siniestros con mayor cantidad de accidentes, estan involucrados los motociclistas o los peatones (las 5 primeras combinaciones suman más del 55% del total de victimas)
+
+3 de cada 4 siniestros son generados por automovilistas, transporte público o transporte de carga (el 75% del total), mas del 75% se producen en cruces y 3 de cada 5 siniestros ocurren en intersecciones con una avenida. Y este porcentaje aumenta en el caso de la franja horaria de la la noche hasta la mañana (es decir, entre las 19 pm y las 11:59 am)
+Resumiendo, las franjas horarias en donde más accidentes ocurren, contienen más proporcion de accidentes en cruces en proporcion del total acaecido.
+
+Finalmente, para el segundo semestre del año 2021, se cumplió con el objetivo de bajar la tasa de homicidios en siniestros viales, pero no se cumplieron los objetivos de reducir la cantidad de accidentes mortales en motociclistas y de bajar el porcentaje de victimas en automoviles.
 
 En función de lo anterior, se hacen las siguientes recomendaciones:
 
@@ -126,5 +132,12 @@ En función de lo anterior, se hacen las siguientes recomendaciones:
 * Reforzar las campañas de seguridad vial entre los días viernes a lunes, intensificando particularmente en el mes de Diciembre.
 * Puntualizar campañas de conducción segura en avenidas .
 * Dirigir las campañas de seguridad hacia el sexo masculino, especialmente en cuanto a conducción en moto, para un rango etario entre los 21 a 50 años.
+* Vital la incorporacion de controles (como camaras o multas digitales) en cruces de la ciudad (tengan semaforos o no), principalmente en avenidas
 
-Entre otras
+Complementariamente, se recomienda tambien:
+
+* Realizar un estudio de las medidas incoporadas a partir del año 2019, que es el primer año donde se presenta el descenso gradual de la cantidad total de accidentes por año
+* Analizar exhaustivamente el porque el repunte de siniestros en los meses de agosto y principalmente de noviembre y diciembre.
+* Complementar con un estudio que apunte al genero de conductores, ya que se presenta una gran desproporcion en la cantidad de victimas en los diferentes géneros
+  
+
