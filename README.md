@@ -86,7 +86,7 @@ En función de lo analizado en el punto anterior, se plantearon tres objetivos e
 
     Como *Población Total* se calculó la población para el año 2021 a partir de los censos poblacionales del año 2010 y 2022.
 
-    En este caso, para el año 2021, la *Tasa de homicidios en siniestros viales* fue de 1.77 lo que significa que, durante los primeros 6 meses del año 2021, hubo aproximadamente 1.77 homicidios en accidentes de tránsito por cada 100,000 habitantes. Ahora, el objetivo planteado es reducir esta tasa para el siguiente semestre de 2021 en un 10%, esto es **1.60**. Cuando se calcula el KPI para este período se obtiene que la *Tasa de homicidios en siniestros viales* fue de **1.35**, lo que significa que para el segundo semestre de 2021 se cumple con el objetivo propuesto.
+    En este caso, para el año 2021, la *Tasa de homicidios en siniestros viales* fue de 1.77 lo que significa que, durante los primeros 6 meses del año 2021, hubo aproximadamente 1.77 homicidios en accidentes de tránsito por cada 100,000 habitantes. Ahora, el objetivo planteado es reducir esta tasa para el siguiente semestre de 2021 en un 10%, esto es **1.59**. Cuando se calcula el KPI para este período se obtiene que la *Tasa de homicidios en siniestros viales* fue de **1.35**, lo que significa que para el segundo semestre de 2021 se cumple con el objetivo propuesto.
 
 * *Reducir en un 7% la cantidad de accidentes mortales de motociclistas en el último año, en CABA, respecto al año anterior*
 
@@ -98,17 +98,19 @@ En función de lo analizado en el punto anterior, se plantearon tres objetivos e
     - $\text{Víctimas moto año anterior}$: Número de accidentes mortales con víctimas en moto en el año anterior
     - $\text{Víctimas moto año actual}$: Número de accidentes mortales con víctimas en moto en el año actual 
 
-    Para este caso, se toma como año actual al año 2021 y como año anterior al año 2020. En primer lugar, se calculó la *Cantidad de accidentes mortales de motociclistas* para el año 2020, el cual resultó de 44.00, de esta manera el objetivo a cumplir es de **40.92** (es decir, la reducción del 7% de la cantidad de accidentes para 2020). El calcular la *Cantidad de accidentes mortales de motociclistas* para el año 2021 resultó de **64.29** lo que significa que aumentó un 64% la cantidad de muertes de conductores de motociclistas respecto del 2021.
+    Para este caso, se toma como año actual al año 2021 y como año anterior al año 2020. En primer lugar, se calculó la *Cantidad de accidentes mortales de motociclistas* para el año 2020, el cual resultó de 44.00, de esta manera el objetivo a cumplir es de **42.78** (es decir, la reducción del 7% de la cantidad de accidentes para 2020). El calcular la *Cantidad de accidentes mortales de motociclistas* para el año 2021 resultó de **46.00** lo que significa que aumentó un 64% la cantidad de muertes de conductores de motociclistas respecto del 2021.
 
 * *Reducir en un 8% la cantidad de accidentes mortales de autos en el último año, en CABA, respecto al año anterior.*
 
-    Como se vio en el análisis exploratorio, el 42% de las víctimas mortales se transportaban en auto al momento del hecho. Por lo que se consideró importante proponer el monitoreo de la cantidad de accidentes mortales en este tipo de conductor. Para ello se define a la **Cantidad de accidentes mortales de automovilistas** como el número absoluto de accidentes fatales en los que estuvieron involucradas víctimas que viajaban en auto en un determinado periodo temporal. La fórmula para medir la evolución de los accidentes mortales con víctimas en auto es: 
+    Se consideró importante proponer el monitoreo de la cantidad de accidentes mortales en este tipo de conductor. Para ello se define a la **Cantidad de accidentes mortales de automovilistas** como el número absoluto de accidentes fatales en los que estuvieron involucradas víctimas que viajaban en auto en un determinado periodo temporal. La fórmula para medir la evolución de los accidentes mortales con víctimas en auto es: 
 
     $\text{Cantidad de accidentes mortales de automovilistas} = -\frac{\text{Víctimas auto año anterior - Víctimas auto año actual}}{\text{Víctimas auto año anterior}}·100$
 
     Donde:
     - $\text{Víctimas auto año anterior}$: Número de accidentes mortales con víctimas en auto en el año anterior
-    - $\text{Víctimas auto año actual}$: Número de accidentes mortales con víctimas en auto en el año actual 
+    - $\text{Víctimas auto año actual}$: Número de accidentes mortales con víctimas en auto en el año actual
+
+    Para este caso, se toma como año actual al año 2021 y como año anterior al año 2020. En primer lugar, se calculó la *Cantidad de accidentes mortales de automovilistas* para el año 2020, el cual resultó de 0.0 (este numero refiere a que la variacion entre el año 2019 y 2020 en la cantidad de accidendetes mortales con victimas en auto no tuvo variacion), de esta manera el objetivo a cumplir es de **-8.0** (es decir, la reducción del 8% de la cantidad de accidentes para 2020). El calcular la *Cantidad de accidentes mortales de motociclistas* para el año 2021 resultó de **-2.96** lo que significa que disminuyó casi un 3% la cantidad de muertes de conductores de automovilistas respecto del 2021.
 
 ## Conclusiones y recomendaciones
 
