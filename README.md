@@ -139,5 +139,10 @@ Complementariamente, se recomienda tambien:
 * Realizar un estudio de las medidas incoporadas a partir del año 2019, que es el primer año donde se presenta el descenso gradual de la cantidad total de accidentes por año
 * Analizar exhaustivamente el porque el repunte de siniestros en los meses de agosto y principalmente de noviembre y diciembre.
 * Complementar con un estudio que apunte al genero de conductores, ya que se presenta una gran desproporcion en la cantidad de victimas en los diferentes géneros
-  
+
+## Deploy y publicación
+
+Disponibilizamos el informe interactivo (Dashboard) en la plataforma NovyPro.
+
+Se puede consultar el dashboard [aquí](https://www.novypro.com/profile_projects/marco-caro?Popup=memberProject&Data=1715989529496x344761139490530750).
 
